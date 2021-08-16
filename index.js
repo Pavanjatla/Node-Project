@@ -71,8 +71,32 @@ ourApp.get("/author/a/:bookName",(req,res) =>{
 
 });
 
-//Publishers
+//Publications
 
+
+
+ourApp.get("/publications",(req,res) =>{
+
+    return res.json({publications:Database.Publication});
+});
+
+
+ourApp.get("/publications/:publicationID",(req,res) =>{
+    const getPublications =Database.Publication.filter(
+        (book) => book.name=== req.params.publicationID);
+
+    return res.json({publications:getPublications});
+
+});
+
+ourApp.get("/publications/p/:bookName",(req,res) =>{
+    const getPublications =Database.Publication.filter(
+        (book) => book.books.includes(req.params.bookName)
+    );
+
+    return res.json({author:getPublications});
+
+});
 
 
 
