@@ -19,10 +19,10 @@
         ---- APIs ------
         Book
         - GET
-            - to get all books 
-            - to get specific books 
-            - to get a list of books based on category 
-            - to get a list of books based on author 
+            - to get all books  --------finished 
+            - to get specific books  --------finished
+            - to get a list of books based on category --------finished
+            - to get a list of books based on author --------finished
         - POST
             - to add new book
         - PUT
@@ -33,9 +33,9 @@
             - delete an author from the book
         Authors
         - GET
-            - to get all authors 
-            - to get specific author 
-            - to get list of author based on a book
+            - to get all authors --------finished
+            - to get specific author  --------finished
+            - to get list of author based on a book  --------finished
         - POST
             - to add new author
             - to update/add new book
@@ -45,9 +45,11 @@
             - delete an author
         Publication
         - GET
-            - to get all publication 
-            - to get specific publication 
-            - to get a list of publication based on a book. 
+            - to get all publication   --------finished
+
+            - to get specific publication  --------finished
+
+            - to get a list of publication based on a book.  --------finished
         - POST
             - Add new publication
         - PUT

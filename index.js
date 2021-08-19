@@ -3,7 +3,9 @@ const express = require("express");
 const { request } = require("http");
 const Database =require("./database");
 
-const ourApp =express();
+const ourApp = express();
+
+ourApp.use(express.json());
 
 ourApp.get("/",(request,response) =>{
     response.json({message:"here is the message"});
@@ -97,7 +99,25 @@ ourApp.get("/publications/p/:bookName",(req,res) =>{
     return res.json({author:getPublications});
 
 });
+ourApp.post("/book/new",(req,res)=>{
 
+    console.log(req.body);
+    return res.json({messsage:"added book successfully"});
+});
+
+ourApp.post("/author/new",(req,res)=>{
+    const {newAuthor} =req.body;
+
+    console.log(newAuthor);
+    return res.json({message : "new author added"});
+});
+
+ourApp.post("/publication/new",(req,res)=>{
+    //const publication =req.body;
+    console.log(req.body);
+
+    return res.json({message:"publication added"});
+});
 
 
 ourApp.listen(5000,()=>console.log("server is listening"));
