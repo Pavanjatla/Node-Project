@@ -99,25 +99,131 @@ ourApp.get("/publications/p/:bookName",(req,res) =>{
     return res.json({author:getPublications});
 
 });
-ourApp.post("/book/new",(req,res)=>{
 
-    console.log(req.body);
-    return res.json({messsage:"added book successfully"});
+//post
+ 
+ourApp.post("/book/new",(req,res)=>{
+    const {newBook}=req.body;
+
+    Database.Book.push(newBook);
+    return res.json(Database.Book);
 });
 
 ourApp.post("/author/new",(req,res)=>{
     const {newAuthor} =req.body;
 
-    console.log(newAuthor);
-    return res.json({message : "new author added"});
+    Database.Author.push(newAuthor);
+    return res.json(Database.Author);
 });
 
 ourApp.post("/publication/new",(req,res)=>{
-    //const publication =req.body;
-    console.log(req.body);
+    const {Public} =req.body;
+    Database.Publication.push(Public);   
 
-    return res.json({message:"publication added"});
+    return res.json(Database.Publication);
 });
+
+//put book
+
+ourApp.put("/book/update/:isbn",(req,res) => {
+    const { updatedData } = req.body;
+    const {isbn} = req.params;
+
+   const book = Database.Book.map((book)=>{
+        if(book.ISBN === isbn){
+            return {...book, ...updatedData};
+        }
+        return book;
+    });
+    return res.json(book);
+});
+
+ourApp.put("/bookAuthor/update/:isbn",(req,res)=>{
+    const { newAuthor} = req.body;
+    const { isbn } = req.params;
+
+    Database.Book.forEach((book)=>{
+        if(book.ISBN === isbn){
+            if(!book.authors.includes(newAuthor)){
+                return book.authors.push(newAuthor);
+            }
+            return book;
+        }
+        return book;
+    });
+
+    Database.Author.forEach((author)=>{
+        if(author.id === newAuthor){
+            if(!author.books.includes(isbn)){
+                return author.books.push(isbn);
+            }
+            return author;
+        }
+        return author;
+    });
+
+
+    return res.json({book : Database.Book, author:Database.Author});
+});
+
+//put author
+
+ourApp.put("/author/update/:id",(req,res) => {
+    const { updatedAuthor } = req.body;
+    const {id} = req.params;
+
+   const author = Database.Author.map((author)=>{
+        if(author.id === parseInt(id)){
+            return {...author, ...updatedAuthor};
+        }
+        return author;
+    });
+    return res.json(author);
+});
+
+//put publications
+
+ourApp.put("/publications/update/:id",(req,res) => {
+    const { updatedPublication } = req.body;
+    const {id} = req.params;
+
+   const publication = Database.Publication.map((publication)=>{
+        if(publication.id === parseInt(id)){
+            return {...publication, ...updatedPublication};
+        }
+        return publication;
+    });
+    return res.json(publication);
+});
+
+ourApp.put("/bookPublication/update/:isbn",(req,res)=>{
+    const { newPublication} = req.body;
+    const { isbn } = req.params;
+
+    Database.Book.forEach((book)=>{
+        if(book.ISBN === isbn){
+            if(!book.publication.includes(newPublication)){
+                return book.publication.push(newPublication);
+            }
+            return book;
+        }
+        return book;
+    });
+
+    Database.Publication.forEach((publication)=>{
+        if(publication.id === newPublication){
+            if(!publication.books.includes(isbn)){
+                return publication.books.push(isbn);
+            }
+            return publication;
+        }
+        return publication;
+    });
+
+
+    return res.json({book : Database.Book, publication:Database.Publication});
+});
+
 
 
 ourApp.listen(5000,()=>console.log("server is listening"));

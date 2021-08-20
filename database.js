@@ -19,7 +19,7 @@ let Book = [
       pubDate: "2021-07-07",
       numOfPage: 225,
       category: ["fiction", "tech", "web dev"],
-      publication: 1,
+      publication: [1],
     },
   ];
   
