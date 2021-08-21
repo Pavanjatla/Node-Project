@@ -166,6 +166,24 @@ ourApp.put("/bookAuthor/update/:isbn",(req,res)=>{
     return res.json({book : Database.Book, author:Database.Author});
 });
 
+
+// update book title name
+
+ourApp.put("/book/updateTitle/:isbn",(req,res) => {
+    const { updatedBookTitle } = req.body;
+    const {isbn} = req.params;
+
+   const book = Database.Book.map((book)=>{
+        if(book.ISBN === isbn){
+            book.title=updatedBookTitle.title;
+            return book;
+        }
+        return book;
+    });
+    return res.json(book);
+});
+
+
 //put author
 
 ourApp.put("/author/update/:id",(req,res) => {
@@ -180,6 +198,24 @@ ourApp.put("/author/update/:id",(req,res) => {
     });
     return res.json(author);
 });
+
+// update Author name
+
+ourApp.put("/author/updateName/:id",(req,res) => {
+    const { updatedAuthorName } = req.body;
+    const {id} = req.params;
+
+   const author = Database.Author.map((author)=>{
+        if(author.id === parseInt(id)){
+            author.name=updatedAuthorName.name;
+            return author;
+        }
+        return author;
+    });
+    return res.json(author);
+});
+
+
 
 //put publications
 
@@ -223,6 +259,106 @@ ourApp.put("/bookPublication/update/:isbn",(req,res)=>{
 
     return res.json({book : Database.Book, publication:Database.Publication});
 });
+
+//Delete book
+
+ourApp.delete("/book/delete/:isbn",(req,res)=>{
+    const {isbn} = req.params;
+    const filteredBooks = Database.Book.filter((book)=>book.ISBN !== isbn);
+
+    Database.Book=filteredBooks;
+
+    return res.json(Database.Book);
+});
+
+
+//Delete book Author
+
+ourApp.delete("/book/delete/author/:isbn/:id",(req,res) =>{
+    const { isbn, id} =req.params;
+    Database.Book.forEach((book) =>{
+        if(book.ISBN === isbn){
+            if(!book.authors.includes(parseInt(id))){
+                return;
+            }
+            book.authors = book.authors.filter((bookid)=> bookid !== parseInt(id));
+            return book;
+        }
+        return book;
+    });
+
+    Database.Author.forEach((author) => {
+        if(author.id === parseInt(id)){
+            if(!author.books.includes(isbn)){
+                return ;
+
+            }
+            author.books = author.books.filter((authorid) => authorid !==isbn);
+            return author;
+        }
+        return author;
+    });
+
+    return res.json({ book:Database.Book , author : Database.Author});
+});
+
+
+//delete Author
+
+ourApp.delete("/author/delete/:id",(req,res)=>{
+    const {id} = req.params;
+    const filteredAuthors = Database.Author.filter((author)=>author.id !== parseInt(id));
+
+    Database.Author=filteredAuthors;
+
+    return res.json(Database.Author);
+});
+
+//delete Publication
+
+ourApp.delete("/publication/delete/:id",(req,res)=>{
+    const {id} = req.params;
+    const filteredPublications = Database.Publication.filter((publication)=>publication.id !== parseInt(id));
+
+    Database.Publication=filteredPublications;
+
+    return res.json(Database.Publication);
+});
+
+
+//Delete Book Publication
+
+
+ourApp.delete("/book/delete/publication/:isbn/:id",(req,res) =>{
+    const { isbn, id} =req.params;
+    Database.Book.forEach((book) =>{
+        if(book.ISBN === isbn){
+            if(!book.publication.includes(parseInt(id))){
+                return;
+            }
+            book.publication = book.publication.filter((bookid)=> bookid !== parseInt(id));
+            return book;
+        }
+        return book;
+    });
+
+    Database.Publication.forEach((publication) => {
+        if(publication.id === parseInt(id)){
+            if(!publication.books.includes(isbn)){
+                return ;
+
+            }
+            publication.books = publication.books.filter((publicid) => publicid !==isbn);
+            return publication;
+        }
+        return publication;
+    });
+
+    return res.json({ book:Database.Book , publication : Database.Publication});
+});
+
+
+
 
 
 
