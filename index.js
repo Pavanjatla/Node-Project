@@ -1,7 +1,25 @@
+require('dotenv').config();
 const { response } = require("express");
+const mongoose = require('mongoose');
 const express = require("express");
 const { request } = require("http");
 const Database =require("./database");
+
+
+
+mongoose.connect(process.env.MONGO_URI,
+{
+
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+
+}
+).then(() => console.log("connection Established"))
+ .catch((err) =>  {
+     console.log(err);
+ });
 
 const ourApp = express();
 

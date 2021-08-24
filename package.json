@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"npx nodemon index"
+    "dev": "npx nodemon index"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/Pavanjatla/Node-Project#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongoose": "^5.13.8",
     "nodemon": "^2.0.12"
   }
 }
