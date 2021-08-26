@@ -3,6 +3,9 @@ const { response } = require("express");
 const mongoose = require('mongoose');
 const express = require("express");
 const { request } = require("http");
+const Book =require('./schema/book');
+const Author =require('./schema/author');
+const Publication =require('./schema/publication');
 const Database =require("./database");
 
 
@@ -32,17 +35,20 @@ ourApp.get("/",(request,response) =>{
 
 //Books
 
-ourApp.get("/book",(req,res) =>{
+ourApp.get("/book", async (req,res) =>{
+    const getAllBooks= await Book.find();
 
-    return res.json({books:Database.Book});
+    return res.json(getAllBooks);
 });
 
 
-ourApp.get("/book/:bookID",(req,res) =>{
-    const getBook =Database.Book.filter(
-        (book) => book.ISBN=== req.params.bookID);
-
-    return res.json({book:getBook});
+ourApp.get("/book/:bookID", async (req,res) =>{
+    const getSpecificBook = await Book.findOne({ISBN : req.params.bookID});
+    if(!getSpecificBook)
+    {
+        return res.json({error : `Does not Exist the Book ${req.params.bookID}`});
+    }
+    return res.json({book:getSpecificBook});
 
 });
 
@@ -120,10 +126,18 @@ ourApp.get("/publications/p/:bookName",(req,res) =>{
 
 //post
  
-ourApp.post("/book/new",(req,res)=>{
-    const {newBook}=req.body;
+ourApp.post("/book/new",async (req,res)=>{
+    try {
+        const {newBook}=req.body;
+        await Book.create(newBook);
+        return res.json({message:"message added succesfully"});
 
-    Database.Book.push(newBook);
+        
+    } catch (error) {
+        return res.json({error : error.message});
+        
+    }
+
     return res.json(Database.Book);
 });
 
