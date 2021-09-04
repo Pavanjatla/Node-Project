@@ -1,7 +1,7 @@
-const Router =require('express').Router();
-const PublicationModel = require('../schema/publication');
+const Router =require("express").Router();
+const PublicationModel = require("../schema/publication");
 
-Router.get("/publications",async(req,res) =>{
+Router.get("/",async(req,res) =>{
 
     const getAllPublications = await PublicationModel.find();
 
@@ -9,7 +9,7 @@ Router.get("/publications",async(req,res) =>{
 });
 
 
-Router.get("/publications/:publicationID",async (req,res) =>{
+Router.get("/:publicationID",async (req,res) =>{
     const getSpecificPublication = await PublicationModel.findOne({id : req.params.publicationID});
     if(!getSpecificPublication)
     {
@@ -19,7 +19,7 @@ Router.get("/publications/:publicationID",async (req,res) =>{
 
 });
 
-Router.get("/publications/p/:bookName",async (req,res) =>{
+Router.get("/p/:bookName",async (req,res) =>{
     const getSpecificPublication = await PublicationModel.findOne({books : req.params.bookName});
     if(!getSpecificPublication)
     {
@@ -29,7 +29,7 @@ Router.get("/publications/p/:bookName",async (req,res) =>{
 
 });
 
-Router.post("/publication/new", async (req,res)=>{
+Router.post("/new", async (req,res)=>{
     try {
         const {newPublication}=req.body;
         await PublicationModel.create(newPublication);
@@ -44,7 +44,7 @@ Router.post("/publication/new", async (req,res)=>{
 
 //delete Publication
 
-Router.delete("/publication/delete/:id",async(req,res)=>{
+Router.delete("/delete/:id",async(req,res)=>{
     const {id} = req.params;
     const updatedPublication=await PublicationModel.findOneAndDelete({
         id :parseInt(id),
@@ -54,7 +54,7 @@ Router.delete("/publication/delete/:id",async(req,res)=>{
 
 //put publications
 
-Router.put("/publications/updateName/:id",async(req,res) => {
+Router.put("/updateName/:id",async(req,res) => {
     const { updatedPublication } = req.body;
     const {id} = req.params;
 

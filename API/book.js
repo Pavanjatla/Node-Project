@@ -1,17 +1,18 @@
-const Router =require('express').Router();
+const Router =require("express").Router();
 
-const AuthorModel = require('../schema/author');
-const BookModel =require('../schema/book');
-const PublicationModel = require('../schema/publication');
+const AuthorModel = require("../schema/author");
+const BookModel =require("../schema/book");
+const PublicationModel = require("../schema/publication");
 
-Router.get("/book", async (req,res) =>{
+Router.get("/", async (req,res) =>{
     const getAllBooks= await BookModel.find();
+    
 
     return res.json(getAllBooks);
 });
 
 
-Router.get("/book/:bookID", async (req,res) =>{
+Router.get("/:bookID", async (req,res) =>{
     const getSpecificBook = await BookModel.findOne({ISBN : req.params.bookID});
     if(!getSpecificBook)
     {
@@ -21,7 +22,7 @@ Router.get("/book/:bookID", async (req,res) =>{
 
 });
 
-Router.get("/book/c/:category",async (req,res) =>{
+Router.get("/c/:category",async (req,res) =>{
     const getCategory = await BookModel.find({category : req.params.category});
 
     if(!getCategory)
@@ -32,7 +33,7 @@ Router.get("/book/c/:category",async (req,res) =>{
 });
 
 
-Router.get("/book/b/:authorID", async (req,res) =>{
+Router.get("/b/:authorID", async (req,res) =>{
     const getBook = await BookModel.find({authors : req.params.authorID});
 
     if(!getBook)
@@ -45,7 +46,7 @@ Router.get("/book/b/:authorID", async (req,res) =>{
 
 //post
 
-Router.post("/book/new",async (req,res)=>{
+Router.post("/new",async (req,res)=>{
     try {
         const {newBook}=req.body;
         await BookModel.create(newBook);
@@ -60,7 +61,7 @@ Router.post("/book/new",async (req,res)=>{
 
 //put
 
-Router.put("/book/updateTitle/:isbn", async(req,res) => {
+Router.put("/updateTitle/:isbn", async(req,res) => {
     const { Title } = req.body;
     const {isbn} = req.params;
 
@@ -78,7 +79,7 @@ Router.put("/book/updateTitle/:isbn", async(req,res) => {
    return res.json({book : updateBook});
 });
 
-Router.put("/book/updateAuthor/:isbn",async(req,res)=>{
+Router.put("/updateAuthor/:isbn",async(req,res)=>{
     const { newAuthor} = req.body;
     const { isbn } = req.params;
 
@@ -115,7 +116,7 @@ Router.put("/book/updateAuthor/:isbn",async(req,res)=>{
 });
 
 
-Router.put("/book/updatePublication/:isbn",async (req,res)=>{
+Router.put("/updatePublication/:isbn",async (req,res)=>{
     const { newPublication} = req.body;
     const { isbn } = req.params;
 
@@ -155,7 +156,7 @@ Router.put("/book/updatePublication/:isbn",async (req,res)=>{
 
 //Delete book
 
-Router.delete("/book/delete/:isbn",async(req,res)=>{
+Router.delete("/delete/:isbn",async(req,res)=>{
     const {isbn} = req.params;
     const updatedBooks=await BookModel.findOneAndDelete({
         ISBN :isbn,
@@ -166,7 +167,7 @@ Router.delete("/book/delete/:isbn",async(req,res)=>{
 
 //Delete book Author
 
-Router.delete("/book/delete/author/:isbn/:id",async (req,res) =>{
+Router.delete("/delete/author/:isbn/:id",async (req,res) =>{
     const { isbn, id} =req.params;
 
    const updatedBooks = await BookModel.findOneAndUpdate({
@@ -199,7 +200,7 @@ Router.delete("/book/delete/author/:isbn/:id",async (req,res) =>{
 });
 
 
-Router.delete("/book/delete/publication/:isbn/:id",async(req,res) =>{
+Router.delete("/delete/publication/:isbn/:id",async(req,res) =>{
     const { isbn, id} =req.params;
     const updatedBooks = await BookModel.findOneAndUpdate({
         ISBN :isbn,

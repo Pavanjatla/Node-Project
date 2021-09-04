@@ -1,15 +1,15 @@
-const Router =require('express').Router();
+const Router =require("express").Router();
 
-const AuthorModel = require('../schema/author');
+const AuthorModel = require("../schema/author");
 
-Router.get("/author",async (req,res) =>{
+Router.get("/",async (req,res) =>{
     const getAllAuthors = await AuthorModel.find();
 
     return res.json(getAllAuthors);
 });
 
 
-Router.get("/author/:authorID",async (req,res) =>{
+Router.get("/:authorID",async (req,res) =>{
     const getSpecificAuthor = await AuthorModel.findOne({id : req.params.authorID});
     if(!getSpecificAuthor)
     {
@@ -19,7 +19,7 @@ Router.get("/author/:authorID",async (req,res) =>{
 
 });
 
-Router.get("/author/a/:bookName", async (req,res) =>{
+Router.get("/a/:bookName", async (req,res) =>{
     const getSpecificAuthor = await AuthorModel.findOne({books : req.params.bookName});
     if(!getSpecificAuthor)
     {
@@ -33,7 +33,7 @@ Router.get("/author/a/:bookName", async (req,res) =>{
 
 //post
 
-Router.post("/author/new", async (req,res)=>{
+Router.post("/new", async (req,res)=>{
     try {
         const {newAuthor}=req.body;
         await AuthorModel.create(newAuthor);
@@ -48,7 +48,7 @@ Router.post("/author/new", async (req,res)=>{
 
 // update Author name
 
-Router.put("/author/updateName/:id", async(req,res) => {
+Router.put("/updateName/:id", async(req,res) => {
     const { Name } = req.body.name;
     const {id} = req.params;
 
@@ -68,16 +68,13 @@ Router.put("/author/updateName/:id", async(req,res) => {
 
 //detele
 
-Router.delete("/author/delete/:id",async(req,res)=>{
+Router.delete("/delete/:id",async(req,res)=>{
     const {id} = req.params;
     const updatedAuthors=await AuthorModel.findOneAndDelete({
         id :parseInt(id),
     });
     return req.json({authors : updatedAuthors})
 });
-
-
-
 
 
 module.exports= Router;
